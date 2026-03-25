@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Surfeos — Quantum Technologies</title>
+<meta name="description" content="Surfeos — Pre-decoder conditioning technology for quantum error correction.">
+<meta property="og:title" content="Surfeos Quantum Technologies">
+<meta property="og:description" content="Pre-decoder conditioning technology for quantum error correction.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://surfeos.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root {
+    --bg: #000002;
+    --teal: #5ce0d6;
+    --cyan: #48cae4;
+    --blue: #6b8aed;
+    --purple: #8b6adf;
+    --text: #d0dce8;
+    --text-dim: rgba(208,220,232,0.4);
+    --text-muted: rgba(208,220,232,0.22);
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  canvas#waves {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .page {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  nav {
+    padding: 2rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    animation: fadeDown 1s ease-out both;
+  }
+  @keyframes fadeDown {
+    from { opacity:0; transform: translateY(-20px); }
+    to { opacity:1; transform: translateY(0); }
+  }
+  .logo-mark {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: var(--text);
+  }
+  .logo-mark img {
+    height: 240px;
+    width: auto;
+    border-radius: 4px;
+  }
+  nav .nav-links { display: flex; gap: 2rem; align-items: center; }
+  nav a.nav-link {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 400;
+    transition: color 0.3s;
+  }
+  nav a.nav-link:hover { color: var(--teal); }
+  .hero {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2rem 2rem 6rem;
+  }
+  .hero-logo {
+    display: block;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 1s 0.2s ease-out both;
+  }
+  .hero-logo video {
+    height: 240px;
+    width: auto;
+    border-radius: 8px;
+  }
+  .dict-card {
+    max-width: 620px;
+    width: 100%;
+    text-align: left;
+    animation: fadeUp 1s 0.4s ease-out both;
+  }
+  .dict-word {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 400;
+    font-size: clamp(3rem, 7vw, 4.8rem);
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    margin-bottom: 0.3rem;
+  }
+  .dict-word .syl { color: var(--text); }
+  .dict-word .dot { color: var(--text-muted); font-weight: 300; }
+  .dict-eos {
+    background: linear-gradient(135deg, var(--teal), var(--blue), var(--purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .dict-pronunciation {
+    font-family: 'DM Mono', monospace;
+    font-size: 1.05rem;
+    color: var(--text-dim);
+    font-weight: 300;
+    margin-bottom: 0.15rem;
+    letter-spacing: 0.02em;
+  }
+  .dict-pos {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+  }
+  .dict-divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, var(--teal), var(--blue), var(--purple));
+    opacity: 0.2;
+    margin-bottom: 1.5rem;
+  }
+  .dict-def {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    line-height: 1.75;
+    color: var(--text);
+    font-weight: 300;
+    margin-bottom: 1.8rem;
+    padding-left: 1.2rem;
+  }
+  .dict-def .num { color: var(--text-muted); font-weight: 500; margin-right: 0.3rem; }
+  .dict-example {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: var(--text-dim);
+    padding-left: 1.2rem;
+    border-left: 2px solid rgba(92,224,214,0.15);
+    margin-bottom: 0.8rem;
+  }
+  .dict-example em {
+    font-style: normal;
+    color: var(--teal);
+  }
+  .osf-link {
+    display: inline-block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+    color: var(--text-dim);
+    text-decoration: none;
+    margin-bottom: 2.5rem;
+    padding-left: 1.2rem;
+    transition: color 0.3s;
+  }
+  .osf-link:hover { color: var(--teal); }
+  .signup-wrap {
+    max-width: 620px;
+    width: 100%;
+    animation: fadeUp 1s 0.8s ease-out both;
+  }
+  .signup-form { display: flex; gap: 0; width: 100%; }
+  .signup-form input {
+    flex: 1;
+    padding: 0.85rem 1.2rem;
+    border: 1px solid rgba(92,224,214,0.12);
+    border-right: none;
+    border-radius: 6px 0 0 6px;
+    background: rgba(12,18,37,0.8);
+    backdrop-filter: blur(12px);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  .signup-form input::placeholder { color: var(--text-muted); }
+  .signup-form input:focus { border-color: var(--teal); }
+  .signup-form button {
+    padding: 0.85rem 1.5rem;
+    background: linear-gradient(135deg, rgba(92,224,214,0.15), rgba(139,106,223,0.15));
+    border: 1px solid rgba(92,224,214,0.2);
+    color: var(--teal);
+    border-radius: 0 6px 6px 0;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: all 0.3s;
+    white-space: nowrap;
+    text-transform: uppercase;
+  }
+  .signup-form button:hover {
+    background: linear-gradient(135deg, rgba(92,224,214,0.25), rgba(139,106,223,0.25));
+    border-color: var(--teal);
+  }
+  .form-note {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-top: 0.7rem;
+    text-align: left;
+    padding-left: 0.1rem;
+  }
+  .signup-success {
+    display: none;
+    padding: 1rem 0;
+    color: var(--teal);
+    font-size: 0.92rem;
+    animation: fadeUp 0.5s ease-out both;
+  }
+  @keyframes fadeUp {
+    from { opacity:0; transform: translateY(25px); }
+    to { opacity:1; transform: translateY(0); }
+  }
+  .bottom-strip {
+    padding: 2rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+    animation: fadeUp 1s 1s ease-out both;
+  }
+  .bottom-strip a { color: var(--text-dim); text-decoration: none; transition: color 0.3s; }
+  .bottom-strip a:hover { color: var(--teal); }
+  @media (max-width: 640px) {
+    nav { padding: 1.5rem; }
+    .nav-links { display: none !important; }
+    .hero { padding: 2rem 1.5rem 4rem; }
+    .signup-form { flex-direction: column; gap: 0.5rem; }
+    .signup-form input { border-radius: 6px; border-right: 1px solid rgba(92,224,214,0.12); }
+    .signup-form button { border-radius: 6px; padding: 0.9rem; }
+    .bottom-strip { padding: 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+<canvas id="waves"></canvas>
+<div class="page">
+  <nav>
+    <span></span>
+    <div class="nav-links">
+      <a class="nav-link" href="mailto:hello@surfeos.com">Contact</a>
+    </div>
+  </nav>
+  <main class="hero">
+    <a class="hero-logo" href="/">
+      <video autoplay muted loop playsinline>
+        <source src="surfeos_site_header_animation.MP4" type="video/mp4">
+      </video>
+    </a>
+    <div class="dict-card">
+      <div class="dict-word">
+        <span class="syl">sur</span><span class="dot">·</span><span class="syl">f</span><span class="dict-eos">eos</span>
+      </div>
+      <div class="dict-pronunciation">/ˈsərfəs/</div>
+      <div class="dict-pos">noun</div>
+      <div class="dict-divider"></div>
+      <div class="dict-def">
+        <span class="num">1.</span> A state-dependent upstream conditioning layer in quantum error correction that transforms syndrome data into a decoder-consumable conditioned representation prior to downstream decoding.
+      </div>
+      <div class="dict-example">
+        "Once <em>Surfeos</em> was inserted as a conditioning layer in a quantum error-correction stack, syndrome data became more interpretable for the downstream decoder."
+      </div>
+      <a class="osf-link" href="https://osf.io/bpxea" target="_blank" rel="noopener">Rigorous Preregistered Validation Protocol on OSF →</a>
+    </div>
+    <div class="signup-wrap">
+      <div id="form-container">
+        <form class="signup-form" id="signup-form" action="https://formspree.io/f/maqprqln" method="POST">
+          <input type="email" name="email" id="email-input" placeholder="you@company.com" required autocomplete="email" />
+          <button type="submit">Get Early Access</button>
+        </form>
+        <p class="form-note">We'll reach out when we're ready to talk.</p>
+      </div>
+      <div class="signup-success" id="signup-success">
+        Thanks — we'll be in touch.
+      </div>
+    </div>
+  </main>
+  <div class="bottom-strip">
+    <span>&copy; 2026 Surfeos, LLC</span>
+    <span>Dallas, Texas</span>
+  </div>
+</div>
+<script>
+const canvas = document.getElementById('waves');
+const ctx = canvas.getContext('2d');
+let w, h, time = 0;
+function resize() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
+window.addEventListener('resize', resize);
+resize();
+function drawWave(yBase, amp, freq, speed, color, alpha, lw) {
+  ctx.beginPath();
+  ctx.strokeStyle = color.replace('ALPHA', alpha);
+  ctx.lineWidth = lw;
+  for (let x = 0; x <= w; x += 2) {
+    const y = yBase + Math.sin(x * freq + time * speed) * amp + Math.sin(x * freq * 0.6 + time * speed * 0.8) * amp * 0.35;
+    x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+}
+function animate() {
+  ctx.clearRect(0, 0, w, h);
+  time += 0.006;
+  const base = h * 0.75;
+  drawWave(base, 15, 0.003, 0.7, 'rgba(92,224,214,ALPHA)', 0.04, 1);
+  drawWave(base + 25, 12, 0.004, 0.9, 'rgba(92,224,214,ALPHA)', 0.025, 0.8);
+  drawWave(base + 45, 10, 0.0035, 1.1, 'rgba(107,138,237,ALPHA)', 0.03, 0.7);
+  drawWave(base + 60, 8, 0.005, 0.5, 'rgba(139,106,223,ALPHA)', 0.02, 0.6);
+  requestAnimationFrame(animate);
+}
+animate();
+document.getElementById('signup-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const email = document.getElementById('email-input').value;
+  fetch('https://formspree.io/f/maqprqln', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify({ email: email })
+  }).then(function(response) {
+    if (response.ok) {
+      document.getElementById('form-container').style.display = 'none';
+      document.getElementById('signup-success').style.display = 'block';
+    }
+  }).catch(function() {
+    document.getElementById('form-container').style.display = 'none';
+    document.getElementById('signup-success').style.display = 'block';
+  });
+});
+</script>
+</body>
+</html>
